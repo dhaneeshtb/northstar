@@ -34,6 +34,11 @@ public final class HttpServer {
 
         private HttpServerBuilder(){
         }
+
+        /**
+         *
+         * @return
+         */
         public static HttpServerBuilder createBuilder(){
             return new HttpServerBuilder();
         }
@@ -42,21 +47,40 @@ public final class HttpServer {
             return this;
         }
 
+        /**
+         *
+         * @param port
+         * @return
+         */
         public  HttpServerBuilder withPort(int port){
             this.port=port;
             return this;
         }
 
+        /***
+         *
+         * @param route
+         * @return
+         */
         public  HttpServerBuilder withRoute(AbstractRoute route){
             this.routes.add(route);
             return this;
         }
 
+        /***
+         *
+         * @param parser
+         * @return
+         */
         public HttpServerBuilder withJWTParser(JWTParser parser){
             this.parser=parser;
             return this;
         }
 
+        /***
+         *
+         * @return
+         */
         public HttpServer build(){
             HttpServer server=new HttpServer(port,isSSL);
             server.backLog=backLog;
@@ -79,6 +103,7 @@ public final class HttpServer {
         this.port=port;
     }
     Channel channel;
+
     public void start()  {
             try {
                 final SSLContext sslCtx = (isSSL) ? ServerSSLContext.get() : null;
