@@ -1,4 +1,4 @@
-package org.dtb.servers.exceptions;
+package org.northstar.servers.exceptions;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
 

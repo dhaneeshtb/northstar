@@ -1,4 +1,4 @@
-package org.dtb.servers;
+package org.northstar.servers;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -8,9 +8,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import org.dtb.servers.jwt.JWTParser;
-import org.dtb.servers.routing.*;
-import org.dtb.servers.ssl.ServerSSLContext;
+import org.northstar.servers.jwt.JWTParser;
+import org.northstar.servers.ssl.ServerSSLContext;
+import org.northstar.servers.routing.AbstractRoute;
+import org.northstar.servers.routing.RequestRoutingContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

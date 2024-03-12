@@ -1,4 +1,4 @@
-package org.dtb.servers;
+package org.northstar.servers;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -6,17 +6,15 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
-import org.dtb.servers.exceptions.SecurityException;
-import org.dtb.servers.exceptions.SeverRuntimeExecption;
-import org.dtb.servers.jwt.AuthRequest;
-import org.dtb.servers.jwt.JWTParser;
-import org.dtb.servers.routing.RequestRoute;
-import org.dtb.servers.routing.RequestRoutingContexts;
-import org.dtb.servers.routing.RequestRoutingResponse;
-import org.dtb.servers.routing.RouteMessage;
+import org.northstar.servers.exceptions.SecurityException;
+import org.northstar.servers.jwt.AuthRequest;
+import org.northstar.servers.jwt.JWTParser;
+import org.northstar.servers.routing.RequestRoute;
+import org.northstar.servers.routing.RequestRoutingContexts;
+import org.northstar.servers.routing.RequestRoutingResponse;
+import org.northstar.servers.routing.RouteMessage;
 
 import java.nio.charset.StandardCharsets;
-import java.rmi.ServerException;
 import java.util.function.Function;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;

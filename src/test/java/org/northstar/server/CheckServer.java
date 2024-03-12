@@ -1,9 +1,9 @@
-package org.dtb.server;
+package org.northstar.server;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import org.dtb.servers.HttpServer;
-import org.dtb.servers.jwt.JWTKeyImpl;
-import org.dtb.servers.routing.DefaultStatusRoute;
+import org.northstar.servers.HttpServer;
+import org.northstar.servers.jwt.JWTKeyImpl;
+import org.northstar.servers.routing.DefaultStatusRoute;
 
 import java.nio.charset.StandardCharsets;
 

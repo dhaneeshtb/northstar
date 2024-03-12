@@ -1,4 +1,4 @@
-package org.dtb.servers.ssl;
+package org.northstar.servers.ssl;
 import io.netty.handler.ssl.SSLUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

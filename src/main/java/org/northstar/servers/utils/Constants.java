@@ -1,4 +1,4 @@
-package org.dtb.servers.utils;
+package org.northstar.servers.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

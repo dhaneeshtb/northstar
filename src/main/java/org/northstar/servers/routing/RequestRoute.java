@@ -1,8 +1,7 @@
-package org.dtb.servers.routing;
+package org.northstar.servers.routing;
 
 import io.netty.handler.codec.http.HttpRequest;
-import org.dtb.servers.jwt.AuthRequest;
-import org.dtb.servers.jwt.JWTParser;
+import org.northstar.servers.jwt.AuthRequest;
 
 import java.util.regex.Pattern;
 

@@ -1,4 +1,4 @@
-package org.dtb.servers.jwt;
+package org.northstar.servers.jwt;
 
 public class AuthRequest {
     public static class AuthInfo{

@@ -1,6 +1,6 @@
-package org.dtb.servers.routing;
-import org.dtb.servers.jwt.AuthRequest;
-import org.dtb.servers.jwt.JWTParser;
+package org.northstar.servers.routing;
+import org.northstar.servers.jwt.AuthRequest;
+import org.northstar.servers.jwt.JWTParser;
 
 import java.util.HashMap;
 import java.util.Map;

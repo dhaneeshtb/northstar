@@ -1,4 +1,4 @@
-package org.dtb.servers;
+package org.northstar.servers;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

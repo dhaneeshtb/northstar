@@ -1,6 +1,6 @@
-package org.dtb.servers.routing;
+package org.northstar.servers.routing;
 
-import org.dtb.servers.utils.JSON;
+import org.northstar.servers.utils.JSON;
 
 import java.util.Map;
 

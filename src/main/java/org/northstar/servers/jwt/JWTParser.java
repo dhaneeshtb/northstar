@@ -1,4 +1,4 @@
-package org.dtb.servers.jwt;
+package org.northstar.servers.jwt;
 
 import com.auth0.jwt.algorithms.Algorithm;
 

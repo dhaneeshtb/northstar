@@ -1,6 +1,6 @@
-package org.dtb.servers.routing;
+package org.northstar.servers.routing;
 
-import org.dtb.servers.jwt.AuthRequest;
+import org.northstar.servers.jwt.AuthRequest;
 
 import java.util.regex.Pattern;
 

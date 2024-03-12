@@ -1,11 +1,11 @@
-package org.dtb.server;
+package org.northstar.server;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.dtb.servers.HttpServer;
-import org.dtb.servers.jwt.JWTKeyImpl;
-import org.dtb.servers.routing.DefaultStatusRoute;
-import org.dtb.servers.utils.Constants;
+import org.northstar.servers.HttpServer;
+import org.northstar.servers.jwt.JWTKeyImpl;
+import org.northstar.servers.routing.DefaultStatusRoute;
+import org.northstar.servers.utils.Constants;
 import org.junit.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
