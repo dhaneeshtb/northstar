@@ -17,7 +17,7 @@ To use NorthStar in your Java project, you can include it as a dependency using 
 **Maven:**
 ```xml
 <dependency>
-    <groupId>org.dtb.utilities</groupId>
+    <groupId>io.github.dhaneeshtb</groupId>
     <artifactId>northstar</artifactId>
     <version>1.0.0</version>
 </dependency>
