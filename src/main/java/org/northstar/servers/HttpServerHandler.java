@@ -98,7 +98,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
         FullHttpResponse response = new DefaultFullHttpResponse(req.protocolVersion(), routeResponse.getStatus(),
                 Unpooled.wrappedBuffer(routeResponse.getBody().getBytes(StandardCharsets.UTF_8)));
         response.headers()
-                .set(CONTENT_TYPE, TEXT_PLAIN)
+                .set(CONTENT_TYPE, routeResponse.getContentType())
                 .setInt(CONTENT_LENGTH, response.content().readableBytes());
         if (keepAlive) {
             if (!req.protocolVersion().isKeepAliveDefault()) {
