@@ -12,7 +12,7 @@ public class DefaultStatusRoute extends AbstractRoute{
         }
         @Override
         public boolean isAuthNeeded() {
-            return true;
+            return false;
         }
         @Override
         public RequestRoutingResponse handle(HttpRequest request) throws Exception {
