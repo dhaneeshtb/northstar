@@ -12,9 +12,10 @@ public class CheckServer {
         start(8080);
     }
 
-    public static void start(int port) {
+    public static HttpServer start(int port) {
         HttpServer.HttpServerBuilder builder= HttpServer.HttpServerBuilder.createBuilder();
         builder.withPort(port).withRoute(new DefaultStatusRoute())
+                .withBacklog(1024)
                 .withJWTParser(new JWTKeyImpl("", Algorithm.HMAC512("test".getBytes(StandardCharsets.UTF_8))));
         HttpServer server=builder.build();
         try {
@@ -22,5 +23,6 @@ public class CheckServer {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return server;
     }
 }

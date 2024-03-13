@@ -11,10 +11,12 @@ public interface RequestRoute {
 
     String baseLayer();
 
-    Pattern getPattern();
+    PatternExtractor getPattern();
 
 
     boolean isAuthNeeded();
     RequestRoutingResponse handle(HttpRequest request) throws Exception;
+
+    PatternExtractor.Match getURIMatch();
 
 }

@@ -88,6 +88,8 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
                 });
             } catch (SecurityException e) {
                 response = RequestRoutingResponse.response(e.getStatus(), new RouteMessage.RouteErrorMessage(e.getMessage()));
+            }finally {
+                RequestRoutingContexts.getInstance().removeContext();
             }
             handleResponse(ctx, req, response);
         }

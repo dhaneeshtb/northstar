@@ -6,19 +6,28 @@ import java.util.regex.Pattern;
 
 public abstract class AbstractRoute implements RequestRoute{
 
-    protected Pattern selfURLPattern;// Pattern.compile("/auth/self", Pattern.CASE_INSENSITIVE);
+    protected PatternExtractor patternExtractor;// Pattern.compile("/auth/self", Pattern.CASE_INSENSITIVE);
+
+    protected String normalizedLayer;
     @Override
-    public Pattern getPattern(){
-        if(selfURLPattern==null){
-            selfURLPattern =  Pattern.compile(baseLayer(), Pattern.CASE_INSENSITIVE);
+    public PatternExtractor getPattern(){
+        if(patternExtractor==null){
+            patternExtractor = new PatternExtractor(baseLayer());
         }
-        return selfURLPattern;
+        return patternExtractor;
     }
+
+
 
 
 
     @Override
     public AuthRequest.AuthInfo getAuthInfo() {
         return RequestRoutingContexts.getInstance().getAuthInfo();
+    }
+
+    @Override
+    public PatternExtractor.Match getURIMatch() {
+        return RequestRoutingContexts.getInstance().getMatch();
     }
 }

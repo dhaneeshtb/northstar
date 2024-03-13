@@ -80,6 +80,11 @@ public final class HttpServer {
             return this;
         }
 
+
+        public HttpServerBuilder withBacklog(int backLog){
+            this.backLog=backLog;
+            return this;
+        }
         public HttpServerBuilder withRequestLogging(){
             enableLogging=true;
             return this;
@@ -117,6 +122,7 @@ public final class HttpServer {
 
     public void start()  {
             try {
+                LOGGER.info("number of processors {}",Runtime.getRuntime().availableProcessors());
                 final SSLContext sslCtx = (isSSL) ? ServerSSLContext.get() : null;
                 EventLoopGroup bossGroup = new NioEventLoopGroup(5);
                 EventLoopGroup workerGroup = new NioEventLoopGroup();

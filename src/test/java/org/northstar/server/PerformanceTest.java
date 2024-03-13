@@ -1,5 +1,7 @@
 package org.northstar.server;
 
+import org.northstar.servers.HttpServer;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -14,8 +16,10 @@ public class PerformanceTest {
     public static void main(String[] args) {
 
         int port=8080;
-        CheckServer.start(port);
+        HttpServer server=CheckServer.start(port);
         fireTest(port);
+        server.shutdown();
+
     }
 
 
