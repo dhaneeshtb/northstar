@@ -9,6 +9,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.northstar.servers.exceptions.GenericServerProcessingException;
+import org.northstar.servers.exceptions.SecurityException;
 import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.jwt.JWTParser;
 import org.northstar.servers.routing.PatternExtractor;
@@ -163,6 +165,8 @@ public final class HttpServer {
             }catch (InterruptedException e){
                 Thread.currentThread().interrupt();
                  LOGGER.error("error while starting server ",e);
+            } catch (SecurityException e) {
+                throw new GenericServerProcessingException(e);
             }
     }
     public void shutdown(){

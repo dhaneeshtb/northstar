@@ -1,9 +1,9 @@
 package org.northstar.servers.routing;
 
 import io.netty.handler.codec.http.HttpRequest;
+import org.northstar.servers.exceptions.GenericServerProcessingException;
 import org.northstar.servers.jwt.AuthRequest;
 
-import java.util.regex.Pattern;
 
 public interface RequestRoute {
 
@@ -15,7 +15,7 @@ public interface RequestRoute {
 
 
     boolean isAuthNeeded();
-    RequestRoutingResponse handle(HttpRequest request) throws Exception;
+    RequestRoutingResponse handle(HttpRequest request) throws GenericServerProcessingException;
 
     PatternExtractor.Match getURIMatch();
 

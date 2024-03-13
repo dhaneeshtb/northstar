@@ -1,6 +1,9 @@
 package org.northstar.servers.jwt;
 
 public class AuthRequest {
+    private AuthRequest(){
+
+    }
     public static class AuthInfo{
         private String username;
         private String role;

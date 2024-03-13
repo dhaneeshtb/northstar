@@ -3,7 +3,7 @@ package org.northstar.servers.exceptions;
 import io.netty.handler.codec.http.HttpResponseStatus;
 
 public class SeverRuntimeExecption extends Exception{
-    private final HttpResponseStatus status;
+    private final transient HttpResponseStatus status;
 
     public HttpResponseStatus getStatus() {
         return status;

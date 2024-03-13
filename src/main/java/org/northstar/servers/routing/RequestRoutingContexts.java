@@ -4,14 +4,20 @@ import org.northstar.servers.jwt.JWTParser;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+ public class RequestRoutingContexts {
 
-public class RequestRoutingContexts {
+    private static RequestRoutingContexts routingContexts;
+    private RequestRoutingContexts(){
+    }
+    public static synchronized   RequestRoutingContexts getInstance(){
+        if(routingContexts==null){
+            routingContexts=new RequestRoutingContexts();
+        }
+        return routingContexts;
+    }
 
     protected static final Map<String,RequestRoute> routesMap=new HashMap<>();
 
-    private static RequestRoutingContexts instance;
 
     public static final ThreadLocal<AuthRequest.AuthInfo> authInfoContext=new ThreadLocal<>();
 
@@ -24,14 +30,7 @@ public class RequestRoutingContexts {
         this.jwtParser = jwtParser;
     }
 
-    private RequestRoutingContexts(){
-    }
-    public static synchronized RequestRoutingContexts getInstance(){
-        if(instance==null){
-            instance=new RequestRoutingContexts();
-        }
-        return instance;
-    }
+
 
     public void register(RequestRoute route){
         routesMap.put(route.baseLayer(),route);

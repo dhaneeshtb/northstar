@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.northstar.servers.HttpServer;
+import org.northstar.servers.exceptions.GenericServerProcessingException;
 import org.northstar.servers.jwt.JWTKeyImpl;
 import org.northstar.servers.routing.AbstractRoute;
 import org.northstar.servers.routing.DefaultStatusRoute;
@@ -40,7 +41,7 @@ public class TestWithCustomRouteServer {
                     }
 
                     @Override
-                    public RequestRoutingResponse handle(HttpRequest request) throws Exception {
+                    public RequestRoutingResponse handle(HttpRequest request) throws GenericServerProcessingException {
                         return RequestRoutingResponse.response(HttpResponseStatus.OK, new RouteMessage.RouteAttributeMessage(Map.of("name", "value")));
                     }
                 });

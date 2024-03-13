@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 public class PatternExtractor {
 
+
     public static class Match{
         private boolean matched;
 
@@ -37,9 +38,6 @@ public class PatternExtractor {
 
         private int constantMatchCount;
 
-        private static Match noMatch(){
-            return new Match();
-        }
     }
 
     public static class PatternType{
@@ -71,9 +69,11 @@ public class PatternExtractor {
 
     protected Pattern pattern;
 
-    private String origPattern;
+    private final String origPattern;
 
-    private String normalizedPattern;
+    public String getOrigPattern() {
+        return origPattern;
+    }
 
     private int tupCount;
 
@@ -93,12 +93,10 @@ public class PatternExtractor {
         });
     }
     private void rewritePattern(String layer){
-        StringBuffer param=new StringBuffer();
-        boolean found=false;
+        StringBuilder param=new StringBuilder();
         for(int i=0;i<layer.length();i++){
             char c = layer.charAt(i);
             if(c=='{'){
-                found=true;
                 String cs=param.toString();
                 if(!cs.isEmpty()) {
                     addConstant(param.toString());
@@ -107,7 +105,6 @@ public class PatternExtractor {
             }else if(c=='}'){
                 postionPatterns.add(new PatternType(false,param.toString()));
                 param.delete(0, param.length());
-                found=false;
             }else{
                 param.append(c);
             }
@@ -140,12 +137,12 @@ public class PatternExtractor {
                     m.setMatched(false);
                     break;
                 }
-                if(match && pp.isConstant()){
+                if(pp.isConstant()){
                     cMatch++;
                 }else{
                     attributes.put(pp.getValue(),checkValue);
                 }
-                m.setMatched(m.isMatched()&& match);
+                m.setMatched(m.isMatched());
             }
             if(m.isMatched()){
                 m.setConstantMatchCount(cMatch);
@@ -156,12 +153,7 @@ public class PatternExtractor {
     }
 
 
-    public static void main(String[] args) {
-        PatternExtractor pe=new PatternExtractor("/status/{abcd}/{def}");
-        pe.postionPatterns.forEach(p-> System.out.println(p.getValue()+":"+p.isConstant()));
-        Match m=pe.match("/status/test/xyz");
-        System.out.println(m.isMatched()+":"+m.constantMatchCount);
-    }
+
 
 
 }

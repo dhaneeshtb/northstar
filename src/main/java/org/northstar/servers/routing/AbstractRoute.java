@@ -2,16 +2,14 @@ package org.northstar.servers.routing;
 
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import org.northstar.servers.exceptions.GenericServerProcessingException;
 import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.utils.TriParameterFunction;
 
-import java.util.Map;
-import java.util.function.Function;
-import java.util.regex.Pattern;
 
 public abstract class AbstractRoute implements RequestRoute{
 
-    protected PatternExtractor patternExtractor;// Pattern.compile("/auth/self", Pattern.CASE_INSENSITIVE);
+    protected PatternExtractor patternExtractor;
 
     protected String baseLayer;
     protected String normalizedLayer;
@@ -27,16 +25,15 @@ public abstract class AbstractRoute implements RequestRoute{
         return patternExtractor;
     }
 
-    public AbstractRoute(){
-
+    protected AbstractRoute(){
     }
 
-    public AbstractRoute(String baseLayer,boolean authNeeded){
+    protected AbstractRoute(String baseLayer,boolean authNeeded){
         this.baseLayer=baseLayer;
         this.authNeeded=authNeeded;
         getPattern();
     }
-    public AbstractRoute(String baseLayer,boolean authNeeded,TriParameterFunction<HttpRequest, AuthRequest.AuthInfo, PatternExtractor.Match,RequestRoutingResponse> handler){
+    protected AbstractRoute(String baseLayer,boolean authNeeded,TriParameterFunction<HttpRequest, AuthRequest.AuthInfo, PatternExtractor.Match,RequestRoutingResponse> handler){
         this(baseLayer,authNeeded);
         this.handler=handler;
 
@@ -64,7 +61,7 @@ public abstract class AbstractRoute implements RequestRoute{
     }
 
     @Override
-    public RequestRoutingResponse handle(HttpRequest request) throws Exception {
+    public RequestRoutingResponse handle(HttpRequest request) throws GenericServerProcessingException {
         if(handler!=null) {
             return handler.handle(request,RequestRoutingContexts.getInstance().getAuthInfo(),RequestRoutingContexts.getInstance().getMatch());
         }else{

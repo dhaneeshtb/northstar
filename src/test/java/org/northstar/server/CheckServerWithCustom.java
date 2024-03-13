@@ -1,17 +1,13 @@
 package org.northstar.server;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.northstar.servers.HttpServer;
 import org.northstar.servers.jwt.JWTKeyImpl;
-import org.northstar.servers.routing.AbstractRoute;
 import org.northstar.servers.routing.DefaultStatusRoute;
 import org.northstar.servers.routing.RequestRoutingResponse;
 import org.northstar.servers.routing.RouteMessage;
-
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 public class CheckServerWithCustom {
     public static void main(String[] args) {

@@ -13,6 +13,10 @@ import java.security.spec.InvalidKeySpecException;
 
 public class SSLUtils {
 
+    private SSLUtils(){
+
+    }
+
     public static X509Certificate[] getX509Certificates(File crtFile) throws CertificateException {
         return SslContext.toX509Certificates(crtFile);
     }
