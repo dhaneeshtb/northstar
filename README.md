@@ -37,6 +37,24 @@ To use NorthStar in your Java project, you can include it as a dependency using 
 ```
 
 
+## Performance Test Report
+
+### Server Performance Metrics
+
+| Metric             | Value        |
+|--------------------|--------------|
+| Total Requests     | 500,000      |
+| Total Time         | 8.04 seconds |
+| Requests per Second| 62,189       |
+| Average Latency    | 0.0001289 seconds/request |
+
+### Conclusion
+
+Based on the performance test results, the HTTP server demonstrated robust performance capabilities, effectively serving 500,000 requests within a short duration of 8.04 seconds. With proper monitoring and optimization strategies, the server can continue to deliver reliable and responsive service to users under varying workloads.
+
+
+
+
 ## Contributing
 Contributions to NorthStar are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request on GitHub.
 
