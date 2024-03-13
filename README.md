@@ -25,7 +25,7 @@ To use NorthStar in your Java project, you can include it as a dependency using 
 </dependency>
 
 ```
-
+### 1. Starting server with default status route
 ```java
     HttpServer.HttpServerBuilder builder=HttpServer.HttpServerBuilder.createBuilder();
     builder.withPort(8080).withRoute(new DefaultStatusRoute())
@@ -36,6 +36,34 @@ To use NorthStar in your Java project, you can include it as a dependency using 
     } catch (Exception e) {
         throw new RuntimeException(e);
     }
+```
+### 2. Starting server with custom route
+```java
+HttpServer.HttpServerBuilder builder = HttpServer.HttpServerBuilder.createBuilder();
+builder.withPort(8080).withRoute(new DefaultStatusRoute())
+        .withRoute(new AbstractRoute() {
+            @Override
+            public String baseLayer() {
+                return "/test";
+            }
+
+            @Override
+            public boolean isAuthNeeded() {
+                return false;
+            }
+
+            @Override
+            public RequestRoutingResponse handle(HttpRequest request) throws Exception {
+                return RequestRoutingResponse.response(HttpResponseStatus.OK, new RouteMessage.RouteAttributeMessage(Map.of("name", "value")));
+            }
+        });
+server = builder.build();
+try {
+    server.start();
+} catch (Exception e) {
+    throw new RuntimeException(e);
+}
+
 ```
 
 
