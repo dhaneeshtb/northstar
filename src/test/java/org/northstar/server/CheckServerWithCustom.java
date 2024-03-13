@@ -21,24 +21,8 @@ public class CheckServerWithCustom {
     public static void start(int port) {
         HttpServer.HttpServerBuilder builder= HttpServer.HttpServerBuilder.createBuilder();
         builder.withPort(port).withRoute(new DefaultStatusRoute())
-                .withRoute(new AbstractRoute() {
-                    @Override
-                    public String baseLayer() {
-                        return "/test/{id}/{yy}";
-                    }
-
-                    @Override
-                    public boolean isAuthNeeded() {
-                        return false;
-                    }
-
-                    @Override
-                    public RequestRoutingResponse handle(HttpRequest request) throws Exception {
-                        System.out.println(getURIMatch().getAttributes());
-                        return RequestRoutingResponse.response(HttpResponseStatus.OK, new RouteMessage.RouteAttributeMessage(Map.of("name", "value")));
-                    }
-                })
-                .withJWTParser(new JWTKeyImpl("", Algorithm.HMAC512("test".getBytes(StandardCharsets.UTF_8))));
+                .withRoute("/test/{id}/{yy}/testing",false,(request,authInfo,match)->
+                        RequestRoutingResponse.response(HttpResponseStatus.OK, new RouteMessage.RouteAttributeMessage(match.getAttributes()))).withJWTParser(new JWTKeyImpl("", Algorithm.HMAC512("test".getBytes(StandardCharsets.UTF_8))));
         HttpServer server=builder.build();
         try {
             server.start();

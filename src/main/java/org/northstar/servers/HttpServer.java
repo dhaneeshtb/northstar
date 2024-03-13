@@ -6,12 +6,17 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.jwt.JWTParser;
+import org.northstar.servers.routing.PatternExtractor;
+import org.northstar.servers.routing.RequestRoutingResponse;
 import org.northstar.servers.ssl.ServerSSLContext;
 import org.northstar.servers.routing.AbstractRoute;
 import org.northstar.servers.routing.RequestRoutingContexts;
+import org.northstar.servers.utils.TriParameterFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +72,12 @@ public final class HttpServer {
          */
         public  HttpServerBuilder withRoute(AbstractRoute route){
             this.routes.add(route);
+            return this;
+        }
+
+        public  HttpServerBuilder withRoute(String layerPattern, boolean authNeeded, TriParameterFunction<HttpRequest,AuthRequest.AuthInfo,PatternExtractor.Match,RequestRoutingResponse> handler){
+            this.routes.add(new AbstractRoute(layerPattern,authNeeded,handler) {
+            });
             return this;
         }
 
