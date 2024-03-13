@@ -1,7 +1,10 @@
 package org.northstar.servers.routing;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.util.CharsetUtil;
 import org.northstar.servers.exceptions.GenericServerProcessingException;
 import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.utils.TriParameterFunction;
@@ -67,5 +70,10 @@ public abstract class AbstractRoute implements RequestRoute{
         }else{
             return RequestRoutingResponse.response(HttpResponseStatus.NOT_IMPLEMENTED,new RouteMessage.RouteErrorMessage("handler not implemented"));
         }
+    }
+
+    public String getRequestBody(HttpRequest request) {
+        ByteBuf jsonBuf = ((FullHttpRequest)request).content();
+        return jsonBuf.toString(CharsetUtil.UTF_8);
     }
 }

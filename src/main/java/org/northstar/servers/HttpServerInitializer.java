@@ -4,9 +4,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.compression.CompressionOptions;
-import io.netty.handler.codec.http.HttpContentCompressor;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
+import io.netty.handler.codec.http.*;
 import io.netty.handler.ssl.SslHandler;
 
 import javax.net.ssl.SSLContext;
@@ -33,6 +31,8 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast(new HttpServerCodec());
         p.addLast(new HttpContentCompressor((CompressionOptions[]) null));
         p.addLast(new HttpServerExpectContinueHandler());
+        p.addLast(new HttpRequestDecoder()); // Decodes the ByteBuf into a HttpMessage and HttpContent (1)
+        p.addLast(new HttpObjectAggregator(1048576));
         p.addLast(new HttpServerHandler());
     }
 }

@@ -6,4 +6,6 @@ public interface JWTParser {
     Algorithm getAlgorithm();
     AuthRequest.AuthInfo verify(String token);
     String createToken(AuthRequest.AuthInfo user);
+    String createToken(AuthRequest.User user);
+
 }

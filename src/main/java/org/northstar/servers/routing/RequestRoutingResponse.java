@@ -1,11 +1,22 @@
 package org.northstar.servers.routing;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.cookie.Cookie;
 
 public class RequestRoutingResponse {
 
     private HttpResponseStatus status;
     private String body;
+
+    private Cookie cookie;
+
+    public Cookie getCookie() {
+        return cookie;
+    }
+
+    public void setCookie(Cookie cookie) {
+        this.cookie = cookie;
+    }
 
     public static RequestRoutingResponse response(HttpResponseStatus status, RouteMessage routeMessage) {
         return new RequestRoutingResponse(status,routeMessage.toString());

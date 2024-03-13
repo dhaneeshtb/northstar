@@ -8,7 +8,17 @@ import java.util.Map;
     private RequestRoutingContexts(){
     }
 
-    private static   final Map<String,RequestRoute> routesMap=new HashMap<>();
+    private static String serverDomain;
+
+     public static String getServerDomain() {
+         return serverDomain;
+     }
+
+     public static void setServerDomain(String serverDomain) {
+         RequestRoutingContexts.serverDomain = serverDomain;
+     }
+
+     private static   final Map<String,RequestRoute> routesMap=new HashMap<>();
 
     private static   final ThreadLocal<AuthRequest.AuthInfo> authInfoContext=new ThreadLocal<>();
 

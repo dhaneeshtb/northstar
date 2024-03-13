@@ -56,6 +56,26 @@ public class JWTKeyImpl implements JWTParser {
             throw new SecurityException(exception);
         }
     }
+    public String createToken(AuthRequest.User user) throws SecurityException {
+        try {
+            Instant issuedAt = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+            Instant expiration = issuedAt.plus(1, ChronoUnit.DAYS);
+            Map<String,String> userAttrMap= Constants.OBJECT_MAPPER.convertValue(user, Map.class);
+            userAttrMap.remove("password");
+            userAttrMap.remove("email");
+            userAttrMap.remove("phone");
+            return JWT.create()
+                    .withIssuer(issuer)
+                    .withSubject(user.getUsername())
+                    .withClaim("role", user.getRole())
+                    .withClaim("user", userAttrMap)
+                    .withExpiresAt(expiration)
+                    .withIssuedAt(issuedAt)
+                    .sign(getAlgorithm());
+        } catch (Exception exception) {
+            throw new SecurityException(exception);
+        }
+    }
 
     public AuthRequest.AuthInfo verify(String token) {
         DecodedJWT decodedJWT;

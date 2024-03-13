@@ -9,15 +9,13 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.northstar.servers.auth.UserStore;
 import org.northstar.servers.exceptions.GenericServerProcessingException;
 import org.northstar.servers.exceptions.SecurityException;
 import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.jwt.JWTParser;
-import org.northstar.servers.routing.PatternExtractor;
-import org.northstar.servers.routing.RequestRoutingResponse;
+import org.northstar.servers.routing.*;
 import org.northstar.servers.ssl.ServerSSLContext;
-import org.northstar.servers.routing.AbstractRoute;
-import org.northstar.servers.routing.RequestRoutingContexts;
 import org.northstar.servers.utils.TriParameterFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +38,10 @@ public final class HttpServer {
         private JWTParser parser;
 
         private boolean enableLogging=false;
+
+        UserStore userStore;
+        private String loginLayer;
+        private String domainName;
 
 
         private HttpServerBuilder(){
@@ -102,6 +104,24 @@ public final class HttpServer {
             enableLogging=true;
             return this;
         }
+        public HttpServerBuilder withUserLoginConf(UserStore userStore){
+            this.userStore=userStore;
+            this.loginLayer="/login";
+            return this;
+        }
+
+        public HttpServerBuilder withLoginLayer(String loginLayer){
+            this.loginLayer=loginLayer;
+            return this;
+        }
+
+        public HttpServerBuilder withDomain(String domainName){
+            this.domainName=domainName;
+            return this;
+        }
+
+
+
 
         /***
          *
@@ -111,7 +131,14 @@ public final class HttpServer {
             HttpServer server=new HttpServer(port,isSSL);
             server.backLog=backLog;
             RequestRoutingContexts.setJwtParser(parser);
+            if(userStore!=null){
+                routes.add(new DefaultLoginRoute(loginLayer,userStore));
+            }
             routes.forEach(RequestRoutingContexts::register);
+            if(domainName!=null){
+                RequestRoutingContexts.setServerDomain(domainName);
+            }
+
             server.enableLogging=enableLogging;
             return server;
         }

@@ -6,6 +6,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 import org.northstar.servers.exceptions.SecurityException;
 import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.jwt.JWTParser;
@@ -101,6 +102,10 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
         response.headers()
                 .set(CONTENT_TYPE, routeResponse.getContentType())
                 .setInt(CONTENT_LENGTH, response.content().readableBytes());
+
+        if(routeResponse.getCookie()!=null){
+            response.headers().add(HttpHeaderNames.SET_COOKIE, ServerCookieEncoder.LAX.encode(routeResponse.getCookie()));
+        }
         if (keepAlive) {
             if (!req.protocolVersion().isKeepAliveDefault()) {
                 response.headers().set(CONNECTION, KEEP_ALIVE);
