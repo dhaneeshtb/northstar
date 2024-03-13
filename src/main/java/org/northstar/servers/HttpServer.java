@@ -110,8 +110,8 @@ public final class HttpServer {
         public HttpServer build(){
             HttpServer server=new HttpServer(port,isSSL);
             server.backLog=backLog;
-            RequestRoutingContexts.getInstance().setJwtParser(parser);
-            routes.forEach(RequestRoutingContexts.getInstance()::register);
+            RequestRoutingContexts.setJwtParser(parser);
+            routes.forEach(RequestRoutingContexts::register);
             server.enableLogging=enableLogging;
             return server;
         }

@@ -47,12 +47,12 @@ public abstract class AbstractRoute implements RequestRoute{
 
     @Override
     public AuthRequest.AuthInfo getAuthInfo() {
-        return RequestRoutingContexts.getInstance().getAuthInfo();
+        return RequestRoutingContexts.getAuthInfo();
     }
 
     @Override
     public PatternExtractor.Match getURIMatch() {
-        return RequestRoutingContexts.getInstance().getMatch();
+        return RequestRoutingContexts.getMatch();
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class AbstractRoute implements RequestRoute{
     @Override
     public RequestRoutingResponse handle(HttpRequest request) throws GenericServerProcessingException {
         if(handler!=null) {
-            return handler.handle(request,RequestRoutingContexts.getInstance().getAuthInfo(),RequestRoutingContexts.getInstance().getMatch());
+            return handler.handle(request,RequestRoutingContexts.getAuthInfo(),RequestRoutingContexts.getMatch());
         }else{
             return RequestRoutingResponse.response(HttpResponseStatus.NOT_IMPLEMENTED,new RouteMessage.RouteErrorMessage("handler not implemented"));
         }

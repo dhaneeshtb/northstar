@@ -38,7 +38,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
         }
         if (getRoute(req).isAuthNeeded()) {
             String token = getToken(req);
-            JWTParser parser = RequestRoutingContexts.getInstance().getParser();
+            JWTParser parser = RequestRoutingContexts.getParser();
             if(parser==null){
                 return RequestRoutingResponse.response(HttpResponseStatus.UNAUTHORIZED, new RouteMessage.RouteErrorMessage("missing auth token parser configuration") );
             }
@@ -49,20 +49,20 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
 
     private AuthRequest.AuthInfo toAuthInfo(String token) throws SecurityException {
         try {
-            AuthRequest.AuthInfo authInfo = RequestRoutingContexts.getInstance().getParser().verify(token);
-            RequestRoutingContexts.getInstance().setAuthInfo(authInfo);
+            AuthRequest.AuthInfo authInfo = RequestRoutingContexts.getParser().verify(token);
+            RequestRoutingContexts.setAuthInfo(authInfo);
             return authInfo;
         }catch (Exception e){
             throw new SecurityException("invalid auth token",HttpResponseStatus.FORBIDDEN);
         }
     }
     private RequestRoute getRoute(HttpRequest req){
-        return RequestRoutingContexts.getInstance().getRouter(req.uri());
+        return RequestRoutingContexts.getRouter(req.uri());
     }
 
     private String getToken(HttpRequest req) throws SecurityException {
         String token = req.headers().get("Authorization");
-        if (token != null && RequestRoutingContexts.getInstance().getParser() != null && (token.contains("Bearer"))) {
+        if (token != null && RequestRoutingContexts.getParser() != null && (token.contains("Bearer"))) {
                 token = token.substring(7);
         }
         if(token==null){
@@ -75,7 +75,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) {
         if (msg instanceof HttpRequest) {
             HttpRequest req = (HttpRequest) msg;
-            RequestRoute route = RequestRoutingContexts.getInstance().getRouter(req.uri());
+            RequestRoute route = RequestRoutingContexts.getRouter(req.uri());
             RequestRoutingResponse response;
             try {
                 response = withAuthInfo(req,authInfo->{
@@ -88,7 +88,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
             } catch (SecurityException e) {
                 response = RequestRoutingResponse.response(e.getStatus(), new RouteMessage.RouteErrorMessage(e.getMessage()));
             }finally {
-                RequestRoutingContexts.getInstance().removeContext();
+                RequestRoutingContexts.removeContext();
             }
             handleResponse(ctx, req, response);
         }
