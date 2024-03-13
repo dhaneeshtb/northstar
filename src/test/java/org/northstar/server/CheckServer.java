@@ -9,8 +9,12 @@ import java.nio.charset.StandardCharsets;
 
 public class CheckServer {
     public static void main(String[] args) {
+        start(8080);
+    }
+
+    public static void start(int port) {
         HttpServer.HttpServerBuilder builder= HttpServer.HttpServerBuilder.createBuilder();
-        builder.withPort(8080).withRoute(new DefaultStatusRoute())
+        builder.withPort(port).withRoute(new DefaultStatusRoute())
                 .withJWTParser(new JWTKeyImpl("", Algorithm.HMAC512("test".getBytes(StandardCharsets.UTF_8))));
         HttpServer server=builder.build();
         try {

@@ -32,6 +32,9 @@ public final class HttpServer {
         private List<AbstractRoute> routes=new ArrayList<>();
         private JWTParser parser;
 
+        private boolean enableLogging=false;
+
+
         private HttpServerBuilder(){
         }
 
@@ -77,6 +80,11 @@ public final class HttpServer {
             return this;
         }
 
+        public HttpServerBuilder withRequestLogging(){
+            enableLogging=true;
+            return this;
+        }
+
         /***
          *
          * @return
@@ -86,6 +94,7 @@ public final class HttpServer {
             server.backLog=backLog;
             RequestRoutingContexts.getInstance().setJwtParser(parser);
             routes.forEach(RequestRoutingContexts.getInstance()::register);
+            server.enableLogging=enableLogging;
             return server;
         }
 
@@ -97,6 +106,8 @@ public final class HttpServer {
     private boolean isSSL;
     private int port;
     private int backLog=1024;
+
+    private boolean enableLogging=false;
 
     public HttpServer(int port,boolean isSSL){
         this.isSSL=isSSL;
@@ -112,9 +123,11 @@ public final class HttpServer {
                     ServerBootstrap b = new ServerBootstrap();
                     b.option(ChannelOption.SO_BACKLOG, backLog);
                     b.group(bossGroup, workerGroup)
-                            .channel(NioServerSocketChannel.class)
-                            .handler(new LoggingHandler(LogLevel.INFO))
-                            .childHandler(new HttpServerInitializer(sslCtx));
+                            .channel(NioServerSocketChannel.class);
+                    if(enableLogging) {
+                        b.handler(new LoggingHandler(LogLevel.INFO));
+                    }
+                    b.childHandler(new HttpServerInitializer(sslCtx));
                     channel = b.bind(port).sync().channel();
                     if(LOGGER.isInfoEnabled()) {
                         LOGGER.info("Open your web browser and navigate to {}://127.0.0.1:{}/",(isSSL ? "https" : "http"),port);
