@@ -1,4 +1,6 @@
-# Northstar - Lightweight Nano HTTP Server
+# Northstar (Nano HTTP Server)
+
+### Lightweight Nano HTTP Server
 
 NorthStar is a lightweight, high-performance Nano HTTP server designed to handle a massive number of concurrent HTTP connections efficiently while maintaining a low memory footprint. It's built with Java, making it highly portable and easy to integrate into various projects.
 
