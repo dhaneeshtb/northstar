@@ -6,6 +6,8 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.cookie.CookieDecoder;
+import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 import org.northstar.servers.exceptions.SecurityException;
 import org.northstar.servers.jwt.AuthRequest;
@@ -14,13 +16,13 @@ import org.northstar.servers.routing.RequestRoute;
 import org.northstar.servers.routing.RequestRoutingContexts;
 import org.northstar.servers.routing.RequestRoutingResponse;
 import org.northstar.servers.routing.RouteMessage;
+import io.netty.handler.codec.http.cookie.Cookie;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 import java.util.function.Function;
 
-import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
-import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
-import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
+import static io.netty.handler.codec.http.HttpHeaderNames.*;
 import static io.netty.handler.codec.http.HttpHeaderValues.CLOSE;
 import static io.netty.handler.codec.http.HttpHeaderValues.KEEP_ALIVE;
 
@@ -66,6 +68,13 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
         if (token != null && RequestRoutingContexts.getParser() != null && (token.contains("Bearer"))) {
                 token = token.substring(7);
         }
+
+        if(token==null){
+            String cookieString = req.headers().get(COOKIE);
+            Set<Cookie> cookies =  ServerCookieDecoder.LAX.decode(cookieString);
+            token= RequestRoutingContexts.getCookieHandler().onReadToken(req, cookies);
+        }
+
         if(token==null){
             throw new SecurityException("missing auth token",HttpResponseStatus.FORBIDDEN);
         }

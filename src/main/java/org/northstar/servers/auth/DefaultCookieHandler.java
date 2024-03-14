@@ -7,6 +7,7 @@ import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.routing.RequestRoutingContexts;
 
 import java.util.List;
+import java.util.Set;
 
 public class DefaultCookieHandler implements CookieHandler{
 
@@ -39,8 +40,9 @@ public class DefaultCookieHandler implements CookieHandler{
     }
 
     @Override
-    public AuthRequest.AuthInfo onReadCookie(HttpRequest request, List<Cookie> cookies) {
-        return null;
+    public String onReadToken(HttpRequest request, Set<Cookie> cookies) {
+        Cookie cookie = cookies.stream().filter(c->cookieName().equals(c.name())).findFirst().orElse(null);
+        return cookie!=null?cookie.value():null;
     }
 
     @Override
