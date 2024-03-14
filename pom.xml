@@ -4,13 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dhaneeshtb</groupId>
-    <artifactId>northstar</artifactId>
-    <version>1.0.2</version>
+    <artifactId>northstar-server</artifactId>
+    <version>1.0.4</version>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <logback.version>1.2.3</logback.version>
+        <gpg.keyname>{env.GPG_KEYNAME}</gpg.keyname>
     </properties>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>NorthStar is a lightweight, high-performance Nano HTTP server designed to handle a massive number of concurrent HTTP connections efficiently while maintaining a low memory footprint. It's built with Java, making it highly portable and easy to integrate into various projects.
