@@ -10,7 +10,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <logback.version>1.2.3</logback.version>
+        <logback.version>1.4.14</logback.version>
         <gpg.keyname>{env.GPG_KEYNAME}</gpg.keyname>
     </properties>
     <name>${project.groupId}:${project.artifactId}</name>
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk18on</artifactId>
-            <version>1.72</version>
+            <version>1.77</version>
         </dependency>
         <dependency>
             <groupId>com.auth0</groupId>
