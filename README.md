@@ -20,7 +20,7 @@ To use NorthStar in your Java project, you can include it as a dependency using 
 ```xml
 <dependency>
     <groupId>io.github.dhaneeshtb</groupId>
-    <artifactId>northstar</artifactId>
+    <artifactId>northstar-server</artifactId>
     <version>1.0.4</version>
 </dependency>
 
