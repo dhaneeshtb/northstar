@@ -6,7 +6,6 @@ import io.netty.handler.codec.http.cookie.DefaultCookie;
 import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.routing.RequestRoutingContexts;
 
-import java.util.List;
 import java.util.Set;
 
 public class DefaultCookieHandler implements CookieHandler{

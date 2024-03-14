@@ -1,7 +1,6 @@
 package org.northstar.servers.auth;
 import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.routing.RequestRoutingContexts;
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 public class LoginHandler {
 
@@ -10,7 +9,7 @@ public class LoginHandler {
         this.userStore=userStore;
     }
 
-    public AuthRequest.LoginResponse login(AuthRequest.LoginInput userInfo) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public AuthRequest.LoginResponse login(AuthRequest.LoginInput userInfo) throws  NoSuchAlgorithmException {
         AuthRequest.User dbUser= userStore.getUser(userInfo.getUsername());
         if(dbUser.getPassword().equalsIgnoreCase(AuthUtils.onewayHash(userInfo.getPassword()))){
             return createResponse(dbUser);

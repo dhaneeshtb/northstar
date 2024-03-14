@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +41,7 @@ public class UserFileStore implements UserStore{
             LOGGER.info("users configuration failed",e);
         }
     }
-    private AuthRequest.User buildUserObject(String username,String password,String name,String email,String phone,String role) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    private AuthRequest.User buildUserObject(String username,String password,String name,String email,String phone,String role) throws  NoSuchAlgorithmException {
         AuthRequest.User user = new AuthRequest.User();
         user.setUsername(username);
         user.setPassword(AuthUtils.onewayHash(password));
