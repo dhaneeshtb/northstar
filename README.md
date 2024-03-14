@@ -89,6 +89,43 @@ public class CheckServerWithCustom {
 }
 ```
 
+### 4. Server with default login enabled
+
+```java
+public class CheckServerWithLogin {
+    public static void main(String[] args) {
+        start(8080);
+    }
+
+    public static void start(int port) {
+        HttpServer.HttpServerBuilder builder= HttpServer.HttpServerBuilder.createBuilder();
+        builder.withPort(port).
+                 withUserLoginConf(new UserFileStore("sampleusers.json"))
+                .withRoute(new DefaultStatusRoute())
+                .withDomain("localhost")
+                .withRoute("/test/{id}/{yy}/testing",false,(request,authInfo,match)->
+                        RequestRoutingResponse.response(HttpResponseStatus.OK, new RouteMessage.RouteAttributeMessage(match.getAttributes()))).withJWTParser(new JWTKeyImpl("", Algorithm.HMAC512("test".getBytes(StandardCharsets.UTF_8))));
+        HttpServer server=builder.build();
+        try {
+            server.start();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+```
+#### sampleusers.json
+```json
+{
+  "users": [
+    {
+      "username": "dhaneesh",
+      "password": "$$$$$"
+    }
+  ]
+}
+```
+
 
 ## Performance Test Report
 

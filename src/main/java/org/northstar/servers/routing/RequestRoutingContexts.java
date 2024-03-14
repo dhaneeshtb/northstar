@@ -1,4 +1,5 @@
 package org.northstar.servers.routing;
+import org.northstar.servers.auth.CookieHandler;
 import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.jwt.JWTParser;
 
@@ -26,6 +27,16 @@ import java.util.Map;
 
 
     private static JWTParser jwtParser;
+
+     public static CookieHandler getCookieHandler() {
+         return cookieHandler;
+     }
+
+     public static void setCookieHandler(CookieHandler cookieHandler) {
+         RequestRoutingContexts.cookieHandler = cookieHandler;
+     }
+
+     private static CookieHandler cookieHandler;
 
     public static void setJwtParser(JWTParser jwtParser) {
         RequestRoutingContexts.jwtParser = jwtParser;

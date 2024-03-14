@@ -9,6 +9,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.northstar.servers.auth.CookieHandler;
+import org.northstar.servers.auth.DefaultCookieHandler;
 import org.northstar.servers.auth.UserStore;
 import org.northstar.servers.exceptions.GenericServerProcessingException;
 import org.northstar.servers.exceptions.SecurityException;
@@ -42,6 +44,7 @@ public final class HttpServer {
         UserStore userStore;
         private String loginLayer;
         private String domainName;
+        private CookieHandler cookieHandler;
 
 
         private HttpServerBuilder(){
@@ -120,6 +123,10 @@ public final class HttpServer {
             return this;
         }
 
+        public HttpServerBuilder withCookieHandle(CookieHandler cookieHandler){
+            this.cookieHandler=cookieHandler;
+            return this;
+        }
 
 
 
@@ -138,7 +145,11 @@ public final class HttpServer {
             if(domainName!=null){
                 RequestRoutingContexts.setServerDomain(domainName);
             }
-
+            if(cookieHandler!=null){
+                RequestRoutingContexts.setCookieHandler(cookieHandler);
+            }else{
+                RequestRoutingContexts.setCookieHandler(new DefaultCookieHandler("token"));
+            }
             server.enableLogging=enableLogging;
             return server;
         }
@@ -154,7 +165,7 @@ public final class HttpServer {
 
     private boolean enableLogging=false;
 
-    public HttpServer(int port,boolean isSSL){
+    private HttpServer(int port,boolean isSSL){
         this.isSSL=isSSL;
         this.port=port;
     }
