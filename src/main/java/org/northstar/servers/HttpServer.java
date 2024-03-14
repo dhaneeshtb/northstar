@@ -82,6 +82,13 @@ public final class HttpServer {
             return this;
         }
 
+        /***
+         *
+         * @param layerPattern
+         * @param authNeeded
+         * @param handler
+         * @return
+         */
         public  HttpServerBuilder withRoute(String layerPattern, boolean authNeeded, TriParameterFunction<HttpRequest,AuthRequest.AuthInfo,PatternExtractor.Match,RequestRoutingResponse> handler){
             this.routes.add(new AbstractRoute(layerPattern,authNeeded,handler) {
             });
