@@ -63,7 +63,7 @@ import java.util.Map;
 
 
     public static RequestRoute getRouter(String uri){
-       return routesMap.values().stream().filter(r->isMatched(r.getPattern(),uri)).findFirst().orElse(null);
+       return routesMap.values().stream().filter(r->isMatched(r.getPattern(),uri.split("\\?")[0])).findFirst().orElse(null);
     }
 
     public static AuthRequest.AuthInfo getAuthInfo(){
