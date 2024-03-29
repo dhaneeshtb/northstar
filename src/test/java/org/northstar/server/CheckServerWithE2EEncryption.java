@@ -9,9 +9,7 @@ import org.northstar.servers.routing.DefaultStatusRoute;
 import org.northstar.servers.routing.RequestRoutingResponse;
 import org.northstar.servers.routing.RouteMessage;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
 
 public class CheckServerWithE2EEncryption {
     public static void main(String[] args) {
