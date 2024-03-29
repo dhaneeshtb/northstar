@@ -10,6 +10,16 @@ public class RequestRoutingResponse {
 
     private Cookie cookie;
 
+    private boolean enableE2EEncryption;
+
+    public boolean isEnableE2EEncryption() {
+        return enableE2EEncryption;
+    }
+
+    public void setEnableE2EEncryption(boolean enableE2EEncryption) {
+        this.enableE2EEncryption = enableE2EEncryption;
+    }
+
     public Cookie getCookie() {
         return cookie;
     }

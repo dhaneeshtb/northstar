@@ -8,6 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
+import org.northstar.security.ContentEncryption;
 import org.northstar.servers.exceptions.SecurityException;
 import org.northstar.servers.jwt.AuthRequest;
 import org.northstar.servers.jwt.JWTParser;
@@ -18,6 +19,7 @@ import org.northstar.servers.routing.RouteMessage;
 import io.netty.handler.codec.http.cookie.Cookie;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -26,6 +28,12 @@ import static io.netty.handler.codec.http.HttpHeaderValues.CLOSE;
 import static io.netty.handler.codec.http.HttpHeaderValues.KEEP_ALIVE;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
+
+    private final End2EndEncryption end2EndEncryption;
+
+    public HttpServerHandler(End2EndEncryption end2EndEncryption) {
+        this.end2EndEncryption=end2EndEncryption;
+    }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -99,8 +107,32 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
             }finally {
                 RequestRoutingContexts.removeContext();
             }
+            if(route!=null && route.isEnableE2EEncryption() && end2EndEncryption!=null){
+                ContentEncryption contentEncryption = getContentEncryptionObject(req);
+                if(contentEncryption!=null) {
+                    response.setBody(Base64.getEncoder().encodeToString(contentEncryption.encrypt2Buffer(response.getBody()).array()));
+                }
+            }
             handleResponse(ctx, req, response);
         }
+    }
+
+    private ContentEncryption getContentEncryptionObject(HttpRequest req){
+        try {
+            String clientKey = req.headers().get("X-Client-Token");
+            String clientCert = req.headers().get("X-Client-Cert");
+            ContentEncryption.ContentEncryptionBuilder ce = new ContentEncryption.ContentEncryptionBuilder(end2EndEncryption.getEncodedKeyPair(), end2EndEncryption.getDecodeDKeyPair())
+                    .withClientKey(clientKey);
+            if (clientCert != null) {
+                ce.withClientCert(new String(Base64.getDecoder().decode(clientCert.getBytes(StandardCharsets.UTF_8))));
+            }else{
+                ce.withInverted(true);
+            }
+            return ce.build();
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     private void handleResponse(ChannelHandlerContext ctx, HttpRequest req, RequestRoutingResponse routeResponse) {

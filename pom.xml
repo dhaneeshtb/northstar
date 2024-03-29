@@ -53,6 +53,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.github.dhaneeshtb</groupId>
+            <artifactId>northstar-security</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>4.1.105.Final</version>

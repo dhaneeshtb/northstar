@@ -20,6 +20,12 @@ public abstract class AbstractRoute implements RequestRoute{
     private TriParameterFunction<HttpRequest, AuthRequest.AuthInfo, PatternExtractor.Match,RequestRoutingResponse> handler;
 
     protected boolean authNeeded;
+
+    protected boolean enableE2EEncryption;
+
+    public boolean isEnableE2EEncryption() {
+        return enableE2EEncryption;
+    }
     @Override
     public PatternExtractor getPattern(){
         if(patternExtractor==null){
@@ -39,6 +45,13 @@ public abstract class AbstractRoute implements RequestRoute{
     protected AbstractRoute(String baseLayer,boolean authNeeded,TriParameterFunction<HttpRequest, AuthRequest.AuthInfo, PatternExtractor.Match,RequestRoutingResponse> handler){
         this(baseLayer,authNeeded);
         this.handler=handler;
+
+    }
+
+    protected AbstractRoute(String baseLayer,boolean authNeeded,boolean enableE2EEncryption,TriParameterFunction<HttpRequest, AuthRequest.AuthInfo, PatternExtractor.Match,RequestRoutingResponse> handler){
+        this(baseLayer,authNeeded);
+        this.handler=handler;
+        this.enableE2EEncryption=enableE2EEncryption;
 
     }
 
@@ -76,4 +89,6 @@ public abstract class AbstractRoute implements RequestRoute{
         ByteBuf jsonBuf = ((FullHttpRequest)request).content();
         return jsonBuf.toString(CharsetUtil.UTF_8);
     }
+
+
 }

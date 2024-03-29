@@ -45,6 +45,7 @@ public final class HttpServer {
         private String loginLayer;
         private String domainName;
         private CookieHandler cookieHandler;
+        private End2EndEncryption end2EndEncryption;
 
 
         private HttpServerBuilder(){
@@ -95,6 +96,12 @@ public final class HttpServer {
             return this;
         }
 
+        public  HttpServerBuilder withRoute(String layerPattern, boolean authNeeded,boolean isEnd2EndEncryption, TriParameterFunction<HttpRequest,AuthRequest.AuthInfo,PatternExtractor.Match,RequestRoutingResponse> handler){
+            this.routes.add(new AbstractRoute(layerPattern,authNeeded,isEnd2EndEncryption,handler) {
+            });
+            return this;
+        }
+
         /***
          *
          * @param parser
@@ -135,6 +142,11 @@ public final class HttpServer {
             return this;
         }
 
+        public HttpServerBuilder withEnd2EndEncryption(End2EndEncryption end2EndEncryption){
+            this.end2EndEncryption=end2EndEncryption;
+            return this;
+        }
+
 
 
         /***
@@ -148,6 +160,10 @@ public final class HttpServer {
             if(userStore!=null){
                 routes.add(new DefaultLoginRoute(loginLayer,userStore));
             }
+            if(end2EndEncryption!=null) {
+                server.end2EndEncryption = end2EndEncryption;
+                routes.add(new KeyPairRoute("/publickey",end2EndEncryption));
+            }
             routes.forEach(RequestRoutingContexts::register);
             if(domainName!=null){
                 RequestRoutingContexts.setServerDomain(domainName);
@@ -158,6 +174,8 @@ public final class HttpServer {
                 RequestRoutingContexts.setCookieHandler(new DefaultCookieHandler("token"));
             }
             server.enableLogging=enableLogging;
+
+
             return server;
         }
 
@@ -171,6 +189,9 @@ public final class HttpServer {
     private int backLog=1024;
 
     private boolean enableLogging=false;
+
+    private End2EndEncryption end2EndEncryption;
+
 
     private HttpServer(int port,boolean isSSL){
         this.isSSL=isSSL;
@@ -191,7 +212,7 @@ public final class HttpServer {
                     if(enableLogging) {
                         b.handler(new LoggingHandler(LogLevel.INFO));
                     }
-                    b.childHandler(new HttpServerInitializer(sslCtx));
+                    b.childHandler(new HttpServerInitializer(sslCtx,end2EndEncryption));
                     channel = b.bind(port).sync().channel();
                     if(LOGGER.isInfoEnabled()) {
                         LOGGER.info("Open your web browser and navigate to {}://127.0.0.1:{}/",(isSSL ? "https" : "http"),port);

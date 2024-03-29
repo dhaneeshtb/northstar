@@ -13,9 +13,11 @@ import javax.net.ssl.SSLEngine;
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 
     private final SSLContext sslCtx;
+    private final End2EndEncryption end2EndEncryption;
 
-    public HttpServerInitializer(SSLContext sslCtx) {
+    public HttpServerInitializer(SSLContext sslCtx,End2EndEncryption end2EndEncryption) {
         this.sslCtx = sslCtx;
+        this.end2EndEncryption=end2EndEncryption;
     }
 
     @Override
@@ -33,6 +35,6 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast(new HttpServerExpectContinueHandler());
         p.addLast(new HttpRequestDecoder()); // Decodes the ByteBuf into a HttpMessage and HttpContent (1)
         p.addLast(new HttpObjectAggregator(1048576));
-        p.addLast(new HttpServerHandler());
+        p.addLast(new HttpServerHandler(end2EndEncryption));
     }
 }

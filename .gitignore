@@ -4,4 +4,6 @@ target
 *.iml
 *.xml
 
+src/test/client/node_modules/
+
 

@@ -13,6 +13,8 @@ public interface RequestRoute {
 
     PatternExtractor getPattern();
 
+    boolean isEnableE2EEncryption();
+
 
     boolean isAuthNeeded();
     RequestRoutingResponse handle(HttpRequest request) throws GenericServerProcessingException;
