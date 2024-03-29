@@ -5,8 +5,60 @@ const TAG_LENGTH = 16;
 const KEY_LENGTH = 32;
 const ITERATION = 65536;
 
+function generateKeyFiles() {
+   const keyPair = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 4096,
+      publicKeyEncoding: {
+         type: 'spki',
+         format: 'pem'
+      },
+      privateKeyEncoding: {
+         type: 'pkcs8',
+         format: 'pem',
+      }
+   });
+    return keyPair;
+}
+
+class GCM {
+    constructor(secret,options) {
+      this.secret=secret;
+      this.options=options;
+    }
+    getKey(salt) {
+        return crypto.pbkdf2Sync(this.secret, salt, this.options.ITERATION_COUNT||ITERATION, this.options.KEY_LENGTH||KEY_LENGTH, 'sha256');
+    }
+
+
+    decrypt(cipherText,salt,iv,aad) {
+        const key = this.getKey(salt);
+        const authTagLength = this.options.TAG_LENGTH||16;
+        const decipher = crypto.createDecipheriv(ALGORITHM, key, iv, { authTagLength:authTagLength });
+        decipher.setAutoPadding(true);
+        const tl=cipherText.length;
+        if(aad){
+            decipher.setAAD(aad);
+        }
+        decipher.setAuthTag(cipherText.slice(tl-authTagLength,tl));
+        const dec=decipher.update(cipherText.slice(0,tl-authTagLength),'binary');
+        return dec.toString('utf-8')+decipher.final('utf-8');
+    }
+}
+
+function numberFromBytes(buffer) {
+  const bytes = new Uint8ClampedArray(buffer);
+  const size = bytes.byteLength;
+  let x = 0;
+  for (let i = 0; i < size; i++) {
+    const byte = bytes[i];
+    x *= 0x100;
+    x += byte;
+  }
+  return x;
+}
+
+
 const server="http://localhost:8080"
-//const server="http://localhost:8080"
 
 async function getPublicKey(){
     return (await axios.get(server+"/publickey")).data.publicKey;
@@ -75,68 +127,11 @@ async function fetchDataWithClentCert({ publicKey, privateKey }){
     console.log(dec);
 }
 
-//fetchData();
+//Fetch with client key
+fetchData();
+
+//Fetch with client RSA certificate
 fetchDataWithClentCert(generateKeyFiles());
 
 
 
-/***
-    generateKeyFiles
-****/
-function generateKeyFiles() {
-   const keyPair = crypto.generateKeyPairSync('rsa', {
-      modulusLength: 4096,
-      publicKeyEncoding: {
-         type: 'spki',
-         format: 'pem'
-      },
-      privateKeyEncoding: {
-         type: 'pkcs8',
-         format: 'pem',
-      }
-   });
-    return keyPair;
-}
-
-class GCM {
-    constructor(secret,options) {
-      this.secret=secret;
-      this.options=options;
-    }
-    getKey(salt) {
-        return crypto.pbkdf2Sync(this.secret, salt, this.options.ITERATION_COUNT||ITERATION, this.options.KEY_LENGTH||KEY_LENGTH, 'sha256');
-    }
-
-
-    decrypt(cipherText,salt,iv,aad) {
-        const key = this.getKey(salt);
-        const authTagLength = this.options.TAG_LENGTH||16;
-        const decipher = crypto.createDecipheriv(ALGORITHM, key, iv, { authTagLength:authTagLength });
-        decipher.setAutoPadding(true);
-        const tl=cipherText.length;
-        if(aad){
-            decipher.setAAD(aad);
-        }
-        decipher.setAuthTag(cipherText.slice(tl-authTagLength,tl));
-        const dec=decipher.update(cipherText.slice(0,tl-authTagLength),'binary');
-        return dec.toString('utf-8')+decipher.final('utf-8');
-    }
-}
-
-function numberFromBytes(buffer) {
-  const bytes = new Uint8ClampedArray(buffer);
-  const size = bytes.byteLength;
-  let x = 0;
-  for (let i = 0; i < size; i++) {
-    const byte = bytes[i];
-    x *= 0x100;
-    x += byte;
-  }
-  return x;
-}
-//
-//const pemHeader = "-----BEGIN PRIVATE KEY-----";
-//const pemFooter = "-----END PRIVATE KEY-----";
-//const pemContents = keyPair.publicKey.substring(pemHeader.length, keyPair.publicKey.length - pemFooter.length);
-//
-//console.log(pemContents);
