@@ -3,6 +3,9 @@ package org.northstar.servers.routing;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.cookie.Cookie;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RequestRoutingResponse {
 
     private HttpResponseStatus status;
@@ -11,6 +14,16 @@ public class RequestRoutingResponse {
     private Cookie cookie;
 
     private boolean enableE2EEncryption;
+
+    private Map<String,Object> headers=new HashMap<>();
+
+    public Map<String, Object> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Map<String, Object> headers) {
+        this.headers = headers;
+    }
 
     public boolean isEnableE2EEncryption() {
         return enableE2EEncryption;

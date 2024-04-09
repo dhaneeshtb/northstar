@@ -143,6 +143,11 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
                 .set(CONTENT_TYPE, routeResponse.getContentType())
                 .setInt(CONTENT_LENGTH, response.content().readableBytes());
 
+        if(routeResponse.getHeaders()!=null){
+            routeResponse.getHeaders().forEach((k,v)-> response.headers()
+                    .set(k, v));
+        }
+
         if(routeResponse.getCookie()!=null){
             response.headers().add(HttpHeaderNames.SET_COOKIE, ServerCookieEncoder.LAX.encode(routeResponse.getCookie()));
         }
