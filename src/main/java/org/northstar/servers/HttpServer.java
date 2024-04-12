@@ -46,6 +46,7 @@ public final class HttpServer {
         private String domainName;
         private CookieHandler cookieHandler;
         private End2EndEncryption end2EndEncryption;
+        private boolean cors;
 
 
         private HttpServerBuilder(){
@@ -147,6 +148,11 @@ public final class HttpServer {
             return this;
         }
 
+        public  HttpServerBuilder withCors(){
+            this.cors=true;
+            return this;
+        }
+
 
 
         /***
@@ -174,6 +180,9 @@ public final class HttpServer {
                 RequestRoutingContexts.setCookieHandler(new DefaultCookieHandler("token"));
             }
             server.enableLogging=enableLogging;
+
+            RequestRoutingContexts.setCors(cors);
+
 
 
             return server;

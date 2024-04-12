@@ -6,10 +6,24 @@ import org.northstar.servers.jwt.JWTParser;
 import java.util.HashMap;
 import java.util.Map;
  public class RequestRoutingContexts {
+
+
+
     private RequestRoutingContexts(){
     }
 
     private static String serverDomain;
+
+
+     public static boolean isCors() {
+         return cors;
+     }
+
+     public static void setCors(boolean cors) {
+         RequestRoutingContexts.cors = cors;
+     }
+
+     private static boolean cors=false;
 
      public static String getServerDomain() {
          return serverDomain;

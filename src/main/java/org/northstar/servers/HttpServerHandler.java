@@ -143,10 +143,18 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
                 .set(CONTENT_TYPE, routeResponse.getContentType())
                 .setInt(CONTENT_LENGTH, response.content().readableBytes());
 
+
+        if(RequestRoutingContexts.isCors()){
+            routeResponse.getHeaders().put("Access-Control-Allow-Origin","*");
+            routeResponse.getHeaders().put("Access-Control-Allow-Methods","*");
+            routeResponse.getHeaders().put("Access-Control-Allow-Headers","*");
+        }
         if(routeResponse.getHeaders()!=null){
             routeResponse.getHeaders().forEach((k,v)-> response.headers()
                     .set(k, v));
         }
+
+
 
         if(routeResponse.getCookie()!=null){
             response.headers().add(HttpHeaderNames.SET_COOKIE, ServerCookieEncoder.LAX.encode(routeResponse.getCookie()));
